@@ -18,7 +18,6 @@ type ProductUpdate struct {
 }
 
 func UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
-	HandleHeaders(w)
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return

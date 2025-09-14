@@ -14,8 +14,8 @@ func Routes(mux *http.ServeMux) *http.ServeMux {
 	mux.Handle("GET /products/{id}", middleware.With(http.HandlerFunc(productController.GetSingleProduct)))
 
 	mux.Handle("POST /products", http.HandlerFunc(productController.CreateProductHandler))
-	mux.Handle("PATCH /products/{id}", http.HandlerFunc(productController.UpdateProductHandler))
-	mux.Handle("DELETE /products/{id}", http.HandlerFunc(productController.DeleteProductHandler))
+	mux.Handle("PATCH /products/{id}", middleware.With(http.HandlerFunc(productController.UpdateProductHandler)))
+	mux.Handle("DELETE /products/{id}", middleware.With(http.HandlerFunc(productController.DeleteProductHandler)))
 
 	mux.Handle("GET /test", middleware.With(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

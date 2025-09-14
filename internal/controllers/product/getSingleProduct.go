@@ -9,11 +9,10 @@ import (
 )
 
 func GetSingleProduct(w http.ResponseWriter, r *http.Request) {
-	HandleHeaders(w)
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+	// if r.Method == http.MethodOptions {
+	// 	w.WriteHeader(http.StatusOK)
+	// 	return
+	// }
 
 	idPram, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {

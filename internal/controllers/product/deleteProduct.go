@@ -10,6 +10,12 @@ import (
 )
 
 func DeleteProductHandler(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	urlId := r.PathValue("id")
 	id, err := strconv.Atoi(urlId)
 

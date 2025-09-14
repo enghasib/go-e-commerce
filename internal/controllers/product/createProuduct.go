@@ -10,11 +10,11 @@ import (
 
 // create product
 func CreateProductHandler(w http.ResponseWriter, r *http.Request) {
-	HandleHeaders(w)
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+
+	// if r.Method == http.MethodOptions {
+	// 	w.WriteHeader(http.StatusOK)
+	// 	return
+	// }
 
 	//extract body and decode
 	var productList = models.ProductList

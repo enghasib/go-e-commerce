@@ -11,7 +11,7 @@ import (
 func Serve() {
 
 	manager := middleware.MManager()
-	manager.Use(middleware.Logger, middleware.Test)
+	manager.Use(middleware.Logger, middleware.Test, middleware.Cors)
 
 	mux := http.NewServeMux()
 	routes := routes.Routes(mux)
