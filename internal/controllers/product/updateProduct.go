@@ -1,4 +1,4 @@
-package productController
+package product
 
 import (
 	"encoding/json"
@@ -17,7 +17,7 @@ type ProductUpdate struct {
 	ImgUrl      *string  `json:"img_url,omitempty"`
 }
 
-func UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return

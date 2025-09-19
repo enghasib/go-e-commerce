@@ -1,4 +1,4 @@
-package productController
+package product
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/enghasib/server/internal/models"
 )
 
-func DeleteProductHandler(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) DeleteProductHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)

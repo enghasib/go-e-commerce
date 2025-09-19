@@ -1,4 +1,4 @@
-package product
+package user
 
 import (
 	"encoding/json"
@@ -7,12 +7,12 @@ import (
 	"github.com/enghasib/server/internal/models"
 )
 
-func (h *ProductHandler) GetProductHandler(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) GetAllUserHandler(w http.ResponseWriter, r *http.Request) {
 	// if r.Method != http.MethodGet {
 	// 	http.Error(w, "Only accept GET request!", http.StatusBadRequest)
 	// 	return
 	// }
-	err := json.NewEncoder(w).Encode(models.ProductList)
+	err := json.NewEncoder(w).Encode(models.UserList)
 	if err != nil {
 		panic(err)
 	}

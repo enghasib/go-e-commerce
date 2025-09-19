@@ -1,4 +1,4 @@
-package productController
+package product
 
 import (
 	"encoding/json"
@@ -8,16 +8,16 @@ import (
 	"github.com/enghasib/server/internal/models"
 )
 
+type Response struct {
+	Message string `json:"message"`
+	Product models.Product
+}
+
 // create product
-func CreateProductHandler(w http.ResponseWriter, r *http.Request) {
-
-	// if r.Method == http.MethodOptions {
-	// 	w.WriteHeader(http.StatusOK)
-	// 	return
-	// }
-
+func (h *ProductHandler) CreateProductHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Create product handler call .......")
 	//extract body and decode
-	var productList = models.ProductList
+	// var productList = models.ProductList
 	var newProduct models.Product
 	err := json.NewDecoder(r.Body).Decode(&newProduct)
 	if err != nil {
@@ -28,7 +28,11 @@ func CreateProductHandler(w http.ResponseWriter, r *http.Request) {
 
 	models.ProductList = append(models.ProductList, newProduct)
 
+	response := Response{
+		Message: "User created successfully!",
+		Product: newProduct,
+	}
 	// mount and encode with response
-	json.NewEncoder(w).Encode(productList)
+	json.NewEncoder(w).Encode(response)
 
 }

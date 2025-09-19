@@ -8,6 +8,16 @@ type Product struct {
 	ImgUrl      string  `json:"img_url"`
 }
 
+type User struct {
+	ID          int    `json:"id"`
+	UserName    string `json:"user_name"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	IsShowOwner bool   `json:"is_shop_owner"`
+}
+
+var UserList = []User{}
+
 var ProductList = []Product{
 	{ID: 1, Title: "Wireless Headphones", Description: "High-quality noise-cancelling headphones.", Price: 129.99, ImgUrl: "https://www.lovefoodhatewaste.com/sites/default/files/styles/twitter_card_image/public/2022-07/Citrus%20fruits.jpg.webp?itok=H1j9CCCS"},
 

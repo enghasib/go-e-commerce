@@ -1,15 +1,28 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/enghasib/server/internal/utils"
+	"github.com/enghasib/server/internal/cmd"
+	"github.com/enghasib/server/internal/controllers/product"
+	"github.com/enghasib/server/internal/controllers/user"
 )
 
-// "github.com/enghasib/server/internal/cmd"
+// "fmt"
+
+// "github.com/enghasib/server/internal/utils"
 
 func main() {
-	// cmd.Serve()
+	userHandler := user.NewUserHandler()
+	productHandler := product.NewProductHandler()
+	server := cmd.NewServer(userHandler, productHandler)
+	server.Serve()
+
+	// payload, err := utils.DecodeToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJfbmFtZSI6InNoYWtpbCIsImVtYWlsIjoic2hha2lsQGdtYWlsLmNvbSIsImlzX3Nob3Bfb3duZXIiOnRydWV9.1ovBg-CTGZZecbQuIIwx2xlHLmgByt7TrALFqhLfgSk", config.GetEnv("JWT_SECRET", "jwt"))
+
+	// if err != nil {
+	// 	fmt.Println("error:", err)
+	// }
+
+	// fmt.Println("payload:", *payload)
 
 	// a := "hello world "
 	// byteArr := []byte(a)
@@ -57,11 +70,11 @@ func main() {
 
 	// fmt.Println("Jwt:", jwt)
 
-	isVerifiedToken, err := utils.Verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NTY1IiwibmFtZSI6ImFsIGhhc2liIiwiZW1haWwiOiJoYXNpYkBleGFtcGxlLmNvbSIsImlzX3Nob3Bfb3duZXIiOnRydWV9.y5d0bRP6Fjv1vOrYwzsjccqOe_b4zHZkO8fulgyhuzg", "my-secret")
+	// isVerifiedToken, err := utils.Verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NTY1IiwibmFtZSI6ImFsIGhhc2liIiwiZW1haWwiOiJoYXNpYkBleGFtcGxlLmNvbSIsImlzX3Nob3Bfb3duZXIiOnRydWV9.y5d0bRP6Fjv1vOrYwzsjccqOe_b4zHZkO8fulgyhuzg", "my-secret")
 
-	if err != nil {
-		fmt.Println("error:", err)
-	}
+	// if err != nil {
+	// 	fmt.Println("error:", err)
+	// }
 
-	fmt.Println("Token verified:", isVerifiedToken)
+	// fmt.Println("Token verified:", isVerifiedToken)
 }

@@ -1,4 +1,4 @@
-package productController
+package product
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"github.com/enghasib/server/internal/models"
 )
 
-func GetSingleProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) GetSingleProduct(w http.ResponseWriter, r *http.Request) {
 	// if r.Method == http.MethodOptions {
 	// 	w.WriteHeader(http.StatusOK)
 	// 	return

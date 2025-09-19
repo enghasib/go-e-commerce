@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -16,8 +15,8 @@ type header struct {
 }
 
 type Payload struct {
-	Sub         string `json:"sub"`
-	Name        string `json:"name"`
+	Sub         int    `json:"sub"`
+	UserName    string `json:"user_name"`
 	Email       string `json:"email"`
 	IsShopOwner bool   `json:"is_shop_owner"`
 }
@@ -79,11 +78,34 @@ func Verify(jwt, secret string) (bool, error) {
 
 	verifyJwt := headerAndPayloadHash + "." + signatureB64
 
-	fmt.Println("verify jwt:", verifyJwt)
-	fmt.Println("jwt:", jwt)
-
 	if jwt == verifyJwt {
 		return true, nil
 	}
-	return false, errors.New("token is not valid")
+	return false, errors.New("invalid token")
+}
+
+func DecodeToken(token, secret string) (*Payload, error) {
+
+	verified, err := Verify(token, secret)
+	if err != nil {
+		return nil, err
+	}
+	if !verified {
+		return nil, errors.New("invalid token")
+	}
+	jwtChunkArr := strings.Split(token, ".")
+	// headerHash := jwtChunkArr[0]
+	payloadHash := jwtChunkArr[1]
+
+	payloadByte, err := base64.RawURLEncoding.DecodeString(payloadHash)
+	if err != nil {
+		return nil, err
+	}
+
+	var payload Payload
+	err = json.Unmarshal(payloadByte, &payload)
+	if err != nil {
+		return nil, err
+	}
+	return &payload, nil
 }
