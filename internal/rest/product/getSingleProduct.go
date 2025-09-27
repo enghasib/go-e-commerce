@@ -4,26 +4,20 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-
-	"github.com/enghasib/server/internal/models"
 )
 
 func (h *ProductHandler) GetSingleProduct(w http.ResponseWriter, r *http.Request) {
-	// if r.Method == http.MethodOptions {
-	// 	w.WriteHeader(http.StatusOK)
-	// 	return
-	// }
 
 	idPram, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		http.Error(w, "invalid parameter", http.StatusBadRequest)
 	}
 
-	for _, product := range models.ProductList {
-		if product.ID == idPram {
-			json.NewEncoder(w).Encode(product)
-			return
-		}
+	product, err := h.productRepo.Get(idPram)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
 	}
+
+	json.NewEncoder(w).Encode(product)
 
 }

@@ -2,47 +2,33 @@ package cmd
 
 import (
 	"fmt"
-	"net/http"
-	"strconv"
 
 	"github.com/enghasib/server/internal/config"
-	"github.com/enghasib/server/internal/controllers/product"
-	"github.com/enghasib/server/internal/controllers/user"
-	middleware "github.com/enghasib/server/internal/middlewares"
+	"github.com/enghasib/server/internal/infrastructure/db"
+	"github.com/enghasib/server/internal/repo"
+	"github.com/enghasib/server/internal/rest"
+	middleware "github.com/enghasib/server/internal/rest/middlewares"
+	"github.com/enghasib/server/internal/rest/product"
+	"github.com/enghasib/server/internal/rest/user"
 )
 
-type server struct {
-	UserHandler    *user.UserHandler
-	ProductHandler *product.ProductHandler
-}
+func Serve() {
+	cnf := config.GetConfig()
 
-func NewServer(
-	userHandler *user.UserHandler,
-	productHandler *product.ProductHandler,
-) *server {
-	return &server{
-		UserHandler:    userHandler,
-		ProductHandler: productHandler,
-	}
-}
-
-func (s *server) Serve() {
-	config.LoadEnv()
-	mux := http.NewServeMux()
-
-	manager := middleware.MManager()
-	manager.Use(middleware.Logger, middleware.Test, middleware.Cors)
-
-	s.UserHandler.UserRoute(mux)
-	s.ProductHandler.ProductRoutes(mux)
-
-	wrappedMux := manager.Apply(mux)
-
-	fmt.Println("Server is running on port:", config.Env.HttpPort)
-
-	port := ":" + strconv.FormatUint(uint64(config.Env.HttpPort), 10)
-	err := http.ListenAndServe(port, wrappedMux)
+	// DB connection
+	dbCon, err := db.NewConnection()
 	if err != nil {
-		panic(err)
+		fmt.Println("DB error:", err)
+		return
 	}
+
+	userRepo := repo.NewUserRepo(dbCon)
+	productRepo := repo.NewProductRepo(dbCon)
+
+	middleware := middleware.NewMiddlewares(cnf)
+	userHandler := user.NewUserHandler(middleware, cnf, userRepo)
+	productHandler := product.NewProductHandler(middleware, productRepo)
+
+	server := rest.NewServer(cnf, userHandler, productHandler)
+	server.Start()
 }

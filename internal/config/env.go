@@ -10,16 +10,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type env struct {
+type Config struct {
 	Version     float64
 	ServiceName string
 	HttpPort    uint
 	JwtSecret   string
 }
 
-var Env *env
+var env *Config
 
-func LoadEnv() *env {
+func LoadEnv() *Config {
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Error to load env!")
@@ -52,13 +52,13 @@ func LoadEnv() *env {
 		os.Exit(1)
 	}
 
-	Env = &env{
+	env = &Config{
 		ServiceName: serviceName,
 		Version:     versionFloat64,
 		HttpPort:    uint(httpPort),
 		JwtSecret:   jwtSecret,
 	}
-	return Env
+	return env
 }
 
 func getEnv(key string) (string, error) {
@@ -66,4 +66,11 @@ func getEnv(key string) (string, error) {
 		return value, nil
 	}
 	return "", errors.New(" env can't load")
+}
+
+func GetConfig() *Config {
+	if env == nil {
+		LoadEnv()
+	}
+	return env
 }

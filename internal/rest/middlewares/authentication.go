@@ -5,13 +5,12 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/enghasib/server/internal/config"
 	"github.com/enghasib/server/internal/utils"
 )
 
-func Authorization(next http.Handler) http.Handler {
+func (m *Middlewares) Authentication(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Authorization middlewares call.....")
+		log.Println("Authentication middlewares call.....")
 		// header
 		AuthenticationHeader := r.Header.Get("Authorization")
 		if AuthenticationHeader == "" {
@@ -29,7 +28,7 @@ func Authorization(next http.Handler) http.Handler {
 		jwt_token := headerArr[1]
 
 		// verify token
-		isVerified, err := utils.Verify(jwt_token, config.Env.JwtSecret)
+		isVerified, err := utils.Verify(jwt_token, m.cnf.JwtSecret)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return

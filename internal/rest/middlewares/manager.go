@@ -10,7 +10,7 @@ type Manager struct {
 	globalMiddlewares []Middleware
 }
 
-func MManager() *Manager {
+func NewManager() *Manager {
 	return &Manager{
 		globalMiddlewares: make([]Middleware, 0),
 	}
@@ -28,7 +28,7 @@ func (mng *Manager) Apply(handler http.Handler) http.Handler {
 	return handler
 }
 
-func With(handler http.Handler, middlewares ...Middleware) http.Handler {
+func (mng *Manager) With(handler http.Handler, middlewares ...Middleware) http.Handler {
 
 	for i := len(middlewares) - 1; i >= 0; i-- {
 		handler = middlewares[i](handler)

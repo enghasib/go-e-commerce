@@ -2,9 +2,9 @@ package user
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-
-	"github.com/enghasib/server/internal/models"
+	"os"
 )
 
 func (h *UserHandler) GetAllUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -12,8 +12,16 @@ func (h *UserHandler) GetAllUserHandler(w http.ResponseWriter, r *http.Request) 
 	// 	http.Error(w, "Only accept GET request!", http.StatusBadRequest)
 	// 	return
 	// }
-	err := json.NewEncoder(w).Encode(models.UserList)
+
+	userList, err := h.userRepo.List()
 	if err != nil {
-		panic(err)
+		http.Error(w, "no user found", http.StatusInternalServerError)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(userList)
+	if err != nil {
+		fmt.Println("error:", err)
+		os.Exit(1)
 	}
 }

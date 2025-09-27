@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/enghasib/server/internal/config"
-	"github.com/enghasib/server/internal/models"
 	"github.com/enghasib/server/internal/utils"
 )
 
@@ -31,15 +29,8 @@ func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user *models.User
-	for _, u := range models.UserList {
-		if u.Email == requestBody.Email && u.Password == requestBody.Password {
-			user = &u
-			break
-		}
-	}
-
-	if user == nil {
+	user, err := h.userRepo.Find(requestBody.Email, requestBody.Password)
+	if err != nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
@@ -51,7 +42,7 @@ func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		IsShopOwner: user.IsShowOwner,
 	}
 
-	jwt, err := utils.CreateToken(config.Env.JwtSecret, payload)
+	jwt, err := utils.CreateToken(h.cnf.JwtSecret, payload)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

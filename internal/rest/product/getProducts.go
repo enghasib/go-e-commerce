@@ -3,8 +3,6 @@ package product
 import (
 	"encoding/json"
 	"net/http"
-
-	"github.com/enghasib/server/internal/models"
 )
 
 func (h *ProductHandler) GetProductHandler(w http.ResponseWriter, r *http.Request) {
@@ -12,7 +10,13 @@ func (h *ProductHandler) GetProductHandler(w http.ResponseWriter, r *http.Reques
 	// 	http.Error(w, "Only accept GET request!", http.StatusBadRequest)
 	// 	return
 	// }
-	err := json.NewEncoder(w).Encode(models.ProductList)
+
+	productList, err := h.productRepo.List()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+	}
+
+	err = json.NewEncoder(w).Encode(productList)
 	if err != nil {
 		panic(err)
 	}
