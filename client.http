@@ -3,7 +3,7 @@ GET http://localhost:4000/products
 Content-Type: application/json
 
 ###
-GET http://localhost:4000/products/3
+GET http://localhost:4000/products/1
 Content-Type: application/json
 
 ###
@@ -22,10 +22,11 @@ Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJfbm
 ###
 PATCH  http://localhost:4000/products/1
 Content-Type: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJfbmFtZSI6Imhhc2liIiwiZW1haWwiOiJoYXNpYkBnbWFpbC5jb20iLCJpc19zaG9wX293bmVyIjpmYWxzZX0.Kdj3bfa59g5ge8P7V3pFGctS3FqlIf6r9S4RrrDClWA
 
 {
-    "title":"love",
-    "description":"i love someone",
+    "title":"Macbook Air",
+    "description":"this is mackbook air",
     "price": 656,
     "img_url":"test"
 }
