@@ -1,0 +1,19 @@
+package user
+
+import (
+	"github.com/enghasib/server/domain"
+	userHandler "github.com/enghasib/server/rest/user"
+)
+
+type Service interface {
+	userHandler.Service
+}
+
+type UserRepo interface {
+	Create(User domain.User) (*domain.User, error)
+	Get(userId int) (*domain.User, error)
+	List() ([]*domain.User, error)
+	Update(id int, User domain.User) (*domain.User, error)
+	Delete(userId int) error
+	Find(email, password string) (*domain.User, error)
+}

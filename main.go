@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/enghasib/server/internal/cmd"
+	"github.com/enghasib/server/cmd"
 )
 
 // "fmt"

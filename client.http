@@ -10,13 +10,13 @@ Content-Type: application/json
 
 POST  http://localhost:4000/products
 Content-Type: application/json
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJfbmFtZSI6Imhhc2liIiwiZW1haWwiOiJoYXNpYkBnbWFpbC5jb20iLCJpc19zaG9wX293bmVyIjpmYWxzZX0.Kdj3bfa59g5ge8P7V3pFGctS3FqlIf6r9S4RrrDClWA
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJfbmFtZSI6Im1hbXVuIiwiZW1haWwiOiJtYW11bkBnbWFpbC5jb20iLCJpc19zaG9wX293bmVyIjpmYWxzZX0.7TNqEEgyNkDOkHzV_HDq8fzdd8zqrY_ZPi6SMvZnj_I
 
 {
-    "title":"I phone 17",
-    "description":"this is the latest iPhone on 2025",
+    "title":"Samsung S25",
+    "description":"this is the latest samsung phone on 2025",
     "price":1300,
-    "img_url":"iphone.jpg"
+    "img_url":"s25.jpg"
 }
 
 ###
@@ -33,7 +33,7 @@ Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJfbm
 ###
 
 ###
-DELETE  http://localhost:4000/products/1
+DELETE  http://localhost:4000/products/3
 Content-Type: application/json
 
 ###
@@ -60,7 +60,7 @@ POST http://localhost:4000/users/login
 Content-Type: application/json
 
 {
-    "email":"hasib@gmail.com",
+    "email":"mamun@gmail.com",
     "password":"123456"
 }
 
