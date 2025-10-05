@@ -2,11 +2,11 @@ package product
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/enghasib/server/domain"
+	"github.com/enghasib/server/utils"
 )
 
 // update struct
@@ -18,16 +18,16 @@ type reqProductUpdateData struct {
 }
 
 func (h *ProductHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+	// if r.Method == http.MethodOptions {
+	// 	w.WriteHeader(http.StatusOK)
+	// 	return
+	// }
 
 	var updatedProduct reqProductUpdateData
 
 	err := json.NewDecoder(r.Body).Decode(&updatedProduct)
 	if err != nil {
-		fmt.Println(err)
+		utils.SendErrorWithError(w, http.StatusBadRequest, "invalid request body!")
 	}
 
 	strId := r.PathValue("id")
@@ -41,10 +41,10 @@ func (h *ProductHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Req
 	})
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.SendErrorWithError(w, http.StatusBadRequest, "product update failed!")
 		return
 	}
 
-	json.NewEncoder(w).Encode(product)
+	utils.SendResponseWithData(w, http.StatusOK, product)
 
 }

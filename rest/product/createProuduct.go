@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/enghasib/server/domain"
+	"github.com/enghasib/server/utils"
 )
 
 type Response struct {
@@ -39,7 +40,7 @@ func (h *ProductHandler) CreateProductHandler(w http.ResponseWriter, r *http.Req
 	})
 
 	if err != nil {
-		http.Error(w, "bad request", http.StatusBadRequest)
+		utils.SendErrorWithError(w, http.StatusBadRequest, "invalid user input")
 		return
 	}
 
@@ -48,6 +49,6 @@ func (h *ProductHandler) CreateProductHandler(w http.ResponseWriter, r *http.Req
 		Product: *product,
 	}
 	// mount and encode with response
-	json.NewEncoder(w).Encode(response)
+	utils.SendResponseWithData(w, http.StatusCreated, response)
 
 }

@@ -63,11 +63,14 @@ func (r *userRepo) Get(userId int) (*domain.User, error) {
 
 }
 
-func (r *userRepo) List() ([]*domain.User, error) {
+func (r *userRepo) List(limit, page int) ([]*domain.User, error) {
+
+	offset := ((page - 1) * limit) + 1
+
 	var userList []*domain.User
 
-	query := `SELECT id, user_name, email, is_shop_owner FROM users`
-	err := r.db.Select(&userList, query)
+	query := `SELECT id, user_name, email, is_shop_owner FROM users LIMIT $1 OFFSET $2`
+	err := r.db.Select(&userList, query, limit, offset)
 	if err != nil {
 		fmt.Println("err:", err)
 	}

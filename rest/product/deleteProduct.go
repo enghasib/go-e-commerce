@@ -1,10 +1,11 @@
 package product
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/enghasib/server/utils"
 )
 
 func (h *ProductHandler) DeleteProductHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +24,9 @@ func (h *ProductHandler) DeleteProductHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	if err := h.srv.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.SendErrorWithError(w, http.StatusInternalServerError, err.Error())
 	}
-	json.NewEncoder(w).Encode(`product delete successfully!`)
+
+	utils.SendResponseWithData(w, http.StatusOK, "product deleted successfully!")
+
 }

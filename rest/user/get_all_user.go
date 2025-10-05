@@ -1,27 +1,29 @@
 package user
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"os"
+	"strconv"
+
+	"github.com/enghasib/server/utils"
 )
 
 func (h *UserHandler) GetAllUserHandler(w http.ResponseWriter, r *http.Request) {
-	// if r.Method != http.MethodGet {
-	// 	http.Error(w, "Only accept GET request!", http.StatusBadRequest)
-	// 	return
-	// }
 
-	userList, err := h.srv.List()
-	if err != nil {
-		http.Error(w, "no user found", http.StatusInternalServerError)
+	queryParam := r.URL.Query()
+	page, _ := strconv.Atoi(queryParam.Get("page"))
+	if page <= 0 {
+		page = 1
+	}
+	limit, _ := strconv.Atoi(queryParam.Get("limit"))
+	if limit <= 0 || limit > 100 {
+		limit = 10
 	}
 
-	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(userList)
+	userList, err := h.srv.List(limit, page)
 	if err != nil {
-		fmt.Println("error:", err)
-		os.Exit(1)
+		utils.SendErrorWithError(w, http.StatusInternalServerError, err.Error())
+		return
 	}
+
+	utils.SendResponseWithPagination(w, userList, page, limit, 0)
 }

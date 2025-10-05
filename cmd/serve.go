@@ -5,6 +5,7 @@ import (
 
 	"github.com/enghasib/server/config"
 	"github.com/enghasib/server/infrastructure/db"
+	"github.com/enghasib/server/product"
 	"github.com/enghasib/server/repo"
 	"github.com/enghasib/server/rest"
 	middleware "github.com/enghasib/server/rest/middlewares"
@@ -35,10 +36,11 @@ func Serve() {
 
 	//domain
 	userService := user.NewService(userRepo)
+	productService := product.NewService(productRepo)
 
 	//handler
 	usrHandler := userHandler.NewUserHandler(middleware, cnf, userService)
-	prodHandler := productHandler.NewProductHandler(middleware, productRepo)
+	prodHandler := productHandler.NewProductHandler(middleware, productService)
 
 	server := rest.NewServer(cnf, usrHandler, prodHandler)
 	server.Start()

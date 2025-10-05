@@ -28,8 +28,8 @@ func (srv *service) Get(userId int) (*domain.User, error) {
 	return user, nil
 }
 
-func (srv *service) List() ([]*domain.User, error) {
-	listOfUser, err := srv.userRepo.List()
+func (srv *service) List(limit, page int) ([]*domain.User, error) {
+	listOfUser, err := srv.userRepo.List(limit, page)
 	if err != nil {
 		return nil, err
 	}

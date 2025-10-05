@@ -29,6 +29,7 @@ func NewProductRepo(db *sqlx.DB) ProductRepo {
 }
 
 func (r *productRepo) Create(product domain.Product) (*domain.Product, error) {
+
 	query := `
 		INSERT INTO products (title, description, price, img_url) values(
 			$1,
@@ -63,17 +64,34 @@ func (r *productRepo) Get(productId int) (*domain.Product, error) {
 	return &prod, nil
 }
 
-func (r *productRepo) List() ([]*domain.Product, error) {
+func (r *productRepo) List(limit, page int) ([]*domain.Product, error) {
+
+	offset := ((page - 1) * limit) + 1
+
 	var productList []*domain.Product
 	query := `
-		SELECT id, title, description, price, img_url FROM products
+		SELECT id, title, description, price, img_url FROM products LIMIT $1 OFFSET $2;
 	`
-	err := r.db.Select(&productList, query)
+	err := r.db.Select(&productList, query, limit, offset)
 	if err != nil {
 		fmt.Println("error:", err)
 		return nil, err
 	}
 	return productList, nil
+}
+
+func (r *productRepo) Count() (int, error) {
+	query := `
+		SELECT COUNT(*) FROM products;
+	`
+	var count int
+	err := r.db.QueryRow(query).Scan(&count)
+
+	if err != nil {
+		fmt.Println("error:", err)
+		return 0, err
+	}
+	return count, nil
 }
 
 func (r *productRepo) Update(prodId int, product domain.Product) (*domain.Product, error) {
@@ -175,21 +193,3 @@ func (r *productRepo) Delete(productId int) error {
 
 	return nil
 }
-
-// func generateProduct(r *productRepo) {
-// 	var ProductList = []*Product{
-// 		{ID: 1, Title: "Wireless Headphones", Description: "High-quality noise-cancelling headphones.", Price: 129.99, ImgUrl: "https://www.lovefoodhatewaste.com/sites/default/files/styles/twitter_card_image/public/2022-07/Citrus%20fruits.jpg.webp?itok=H1j9CCCS"},
-
-// 		{ID: 2, Title: "Smart Watch", Description: "Stylish smart watch with health tracking.", Price: 199.99, ImgUrl: "https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/05/apples-1296x728-header.jpg?w=1155&h=1528"},
-
-// 		{ID: 3, Title: "Running Shoes", Description: "Lightweight shoes for everyday running.", Price: 89.50, ImgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbMOVB8a8wRQ6e-UKZggiu7-edRAN1GolPQ&s"},
-
-// 		{ID: 4, Title: "Wireless Headphones", Description: "High-quality noise-cancelling headphones.", Price: 129.99, ImgUrl: "https://www.lovefoodhatewaste.com/sites/default/files/styles/twitter_card_image/public/2022-07/Citrus%20fruits.jpg.webp?itok=H1j9CCCS"},
-
-// 		{ID: 5, Title: "Smart Watch", Description: "Stylish smart watch with health tracking.", Price: 199.99, ImgUrl: "https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/05/apples-1296x728-header.jpg?w=1155&h=1528"},
-
-// 		{ID: 6, Title: "Running Shoes", Description: "Lightweight shoes for everyday running.", Price: 89.50, ImgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbMOVB8a8wRQ6e-UKZggiu7-edRAN1GolPQ&s"},
-// 	}
-// 	r.productList = append(r.productList, ProductList...)
-
-// }

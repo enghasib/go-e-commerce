@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/enghasib/server/domain"
+	"github.com/enghasib/server/utils"
 )
 
 type UserResponse struct {
@@ -29,7 +30,7 @@ func (h *UserHandler) CreateUserHandler(w http.ResponseWriter, r *http.Request) 
 
 	err := json.NewDecoder(r.Body).Decode(&newUser)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		utils.SendErrorWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -41,13 +42,12 @@ func (h *UserHandler) CreateUserHandler(w http.ResponseWriter, r *http.Request) 
 	})
 
 	if err != nil {
-		http.Error(w, "user creation failed", http.StatusBadRequest)
+		utils.SendErrorWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// mount and encode with response
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(UserResponse{
+	utils.SendResponseWithData(w, http.StatusCreated, UserResponse{
 		Message:     "User created Successfully!",
 		ID:          user.ID,
 		UserName:    user.UserName,

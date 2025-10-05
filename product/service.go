@@ -1,6 +1,8 @@
 package product
 
-import "github.com/enghasib/server/domain"
+import (
+	"github.com/enghasib/server/domain"
+)
 
 type service struct {
 	productRepo ProductRepo
@@ -28,12 +30,20 @@ func (srv *service) Get(productId int) (*domain.Product, error) {
 	return product, err
 }
 
-func (srv *service) List() ([]*domain.Product, error) {
-	listOfProduct, err := srv.productRepo.List()
+func (srv *service) List(limit, page int) ([]*domain.Product, error) {
+	listOfProduct, err := srv.productRepo.List(limit, page)
 	if err != nil {
 		return nil, err
 	}
 	return listOfProduct, nil
+}
+
+func (srv *service) Count() (int, error) {
+	count, err := srv.productRepo.Count()
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 func (srv *service) Update(id int, product domain.Product) (*domain.Product, error) {

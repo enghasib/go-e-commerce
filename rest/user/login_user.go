@@ -44,7 +44,7 @@ func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	jwt, err := utils.CreateToken(h.cnf.JwtSecret, payload)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		utils.SendErrorWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -53,5 +53,5 @@ func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		AccessToken: jwt,
 	}
 
-	json.NewEncoder(w).Encode(response)
+	utils.SendResponseWithData(w, http.StatusOK, response)
 }
