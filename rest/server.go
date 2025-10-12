@@ -35,7 +35,7 @@ func (s *server) Start() {
 	mux := http.NewServeMux()
 
 	manager := middleware.NewManager()
-	manager.Use(middleware.Logger, middleware.Test, middleware.Cors)
+	manager.Use(middleware.Logger, middleware.Cors)
 
 	s.UserHandler.UserRoute(mux, manager)
 	s.ProductHandler.ProductRoutes(mux, manager)

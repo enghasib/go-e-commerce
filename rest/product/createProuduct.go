@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/enghasib/server/domain"
+	middleware "github.com/enghasib/server/rest/middlewares"
 	"github.com/enghasib/server/utils"
 )
 
@@ -23,7 +24,6 @@ type createProductRequestData struct {
 
 // create product
 func (h *ProductHandler) CreateProductHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Create product handler call .......")
 	//extract body and decode
 	// var productList = models.ProductList
 	var newProduct createProductRequestData
@@ -31,6 +31,10 @@ func (h *ProductHandler) CreateProductHandler(w http.ResponseWriter, r *http.Req
 	if err != nil {
 		fmt.Println("Json parsing error:", err.Error())
 	}
+
+	userPayload := r.Context().Value(middleware.UserContextKey)
+
+	fmt.Println("payload:", userPayload)
 
 	product, err := h.srv.Create(domain.Product{
 		Title:       newProduct.Title,

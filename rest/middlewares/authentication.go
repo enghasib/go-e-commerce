@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strings"
@@ -21,7 +22,7 @@ func (m *Middlewares) Authentication(next http.Handler) http.Handler {
 		//split header and grep the token
 		headerArr := strings.Split(AuthenticationHeader, " ")
 		if len(headerArr) != 2 {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			utils.SendErrorWithError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
 
@@ -35,10 +36,17 @@ func (m *Middlewares) Authentication(next http.Handler) http.Handler {
 		}
 
 		if !isVerified {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			utils.SendErrorWithError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
 
-		next.ServeHTTP(w, r)
+		user, err := utils.DecodeToken(jwt_token, m.cnf.JwtSecret)
+		if err != nil {
+			utils.SendErrorWithError(w, http.StatusInternalServerError, "failed to verify")
+		}
+
+		ctx := context.WithValue(r.Context(), UserContextKey, user)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

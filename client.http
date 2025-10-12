@@ -2,7 +2,6 @@
 @port = 4000
 @jwt_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJfbmFtZSI6Im1hbXVuIiwiZW1haWwiOiJtYW11bkBnbWFpbC5jb20iLCJpc19zaG9wX293bmVyIjpmYWxzZX0.7TNqEEgyNkDOkHzV_HDq8fzdd8zqrY_ZPi6SMvZnj_I
 
-
 GET {{url}}:{{port}}/products?limit=10&page=3
 Content-Type: application/json
 
@@ -17,7 +16,7 @@ Content-Type: application/json
 Authorization:Bearer {{jwt_token}}
 
 {
-    "title":"walton",
+    "title":"iMac",
     "description":"this is the latest walton phone on 2025",
     "price":1300,
     "img_url":"wal.jpg"
